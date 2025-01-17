@@ -1,100 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <title>City Planner Visualization</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 10px;
-        }
-
-        #myCanvas {
-            border: 1px solid #ccc;
-            background-color: #fafafa;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>City Planner with Leaflet + LayerGroup</title>
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"
+  />
+  <style>
+    body {
+      margin: 10px;
+      font-family: Arial, sans-serif;
+    }
+    #map {
+      width: 800px;
+      height: 600px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+    #scoreInfo {
+      display: inline-block;
+      margin-left: 15px;
+      font-weight: bold;
+    }
+    #breakdown {
+      background: #f2f2f2;
+      white-space: pre-wrap;
+      padding: 5px;
+    }
+    #jsonBox {
+      width: 100%;
+      height: 120px;
+    }
+  </style>
 </head>
 <body>
-<h1>City Planner Visualization</h1>
-<button id="solveBtn">Get/Refresh Plan</button>
-<p id="scoreInfo">Score: N/A</p>
+  <h1>City Planner (Leaflet + Markers with Clear)</h1>
 
-<canvas id="myCanvas" width="600" height="400"></canvas>
+  <!-- Plan selection UI -->
+  <select id="planSelect">
+    <option value="PlanSmall">PlanSmall</option>
+    <option value="PlanMedium">PlanMedium</option>
+    <option value="PlanLarge">PlanLarge</option>
+  </select>
+  <button id="btnLoadPlan">Load Plan (GET /solve/PlanX)</button>
 
-<script>
-    const solveBtn = document.getElementById("solveBtn");
+  <!-- Hardcoded POST -->
+  <button id="btnPost">POST Hardcoded</button>
+
+  <!-- Score display -->
+  <span id="scoreInfo">Score: N/A</span>
+
+  <!-- The Leaflet map -->
+  <div id="map"></div>
+
+  <h3>Constraint Breakdown</h3>
+  <pre id="breakdown"></pre>
+
+  <h3>POST custom JSON</h3>
+  <textarea id="jsonBox">
+{
+  "id": "MyPlanCustom",
+  "locations": [
+    {
+      "id": 1,
+      "name": "CustomLocA",
+      "x": 56.95,
+      "y": 24.10,
+      "zone": "RESIDENTIAL",
+      "cost_factor": 3.0,
+      "allowed_building_types": ["HOUSE","SCHOOL"]
+    }
+  ],
+  "buildings": [
+    { "id": 101, "building_type": "HOUSE" }
+  ]
+}
+  </textarea>
+  <br/>
+  <button id="btnPostCustom">Send From Box</button>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // 1) Create the Leaflet map
+    const map = L.map("map").setView([56.95, 24.1], 10);
+
+    // 2) Add the tile layer (OpenStreetMap)
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // 3) Create a markerGroup to hold all markers
+    const markerGroup = L.layerGroup().addTo(map);
+
+    // Some references to HTML elements
+    const planSelect = document.getElementById("planSelect");
+    const btnLoadPlan = document.getElementById("btnLoadPlan");
+    const btnPost = document.getElementById("btnPost");
+    const btnPostCustom = document.getElementById("btnPostCustom");
     const scoreInfo = document.getElementById("scoreInfo");
-    const canvas = document.getElementById("myCanvas");
-    const ctx = canvas.getContext("2d");
+    const breakdownEl = document.getElementById("breakdown");
+    const jsonBox = document.getElementById("jsonBox");
 
-    solveBtn.addEventListener("click", () => {
-        fetchSolution();
+    // A) GET /solve/<planName>
+    btnLoadPlan.addEventListener("click", () => {
+      const planName = planSelect.value; // e.g. PlanSmall, PlanMedium, etc.
+      fetch(`/solve/${planName}`)
+        .then((r) => r.json())
+        .then((data) => showSolution(data))
+        .catch((err) => {
+          console.error("Error GET /solve/<planName>:", err);
+        });
     });
 
-    function fetchSolution() {
-        // Piemērs: GET pieprasījums uz /solve
-        fetch("/solve")
-            .then(response => response.json())
-            .then(data => {
-                console.log("Solution data:", data);
-                scoreInfo.textContent = "Score: " + data.score;
-                drawSolution(data);
-            })
-            .catch(err => {
-                console.error("Error fetching solution:", err);
-            });
-    }
+    // B) POST hardcoded scenario
+    btnPost.addEventListener("click", () => {
+      const payload = {
+        "id": "PlanPOST",
+        "locations": [
+          {
+            "id": 1,
+            "name": "SomeLoc",
+            "x": 56.9496,
+            "y": 24.1052,
+            "zone": "RESIDENTIAL",
+            "cost_factor": 3.0,
+            "allowed_building_types": ["HOUSE","SCHOOL"]
+          },
+          {
+            "id": 2,
+            "name": "AnotherLoc",
+            "x": 56.9600,
+            "y": 24.1200,
+            "zone": "COMMERCIAL",
+            "cost_factor": 5.0,
+            "allowed_building_types": ["OFFICE","SHOP"]
+          }
+        ],
+        "buildings": [
+          { "id": 101, "building_type": "HOUSE" },
+          { "id": 102, "building_type": "OFFICE" }
+        ]
+      };
+      doPost(payload);
+    });
 
-    function drawSolution(solutionData) {
-        // Notīrām canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // C) POST from the textarea
+    btnPostCustom.addEventListener("click", () => {
+      let txt = jsonBox.value;
+      try {
+        const obj = JSON.parse(txt);
+        doPost(obj);
+      } catch (e) {
+        alert("Error in JSON parse: " + e);
+      }
+    });
 
-        // Izdomājam mērogu (scale), ja koordinātes var būt lielas
-        // Vienkāršības pēc varam piemēram paņemt factor = 20
-        let scale = 10;
-
-        // Piemēram, ejam cauri "placements" masīvam
-        let placements = solutionData.placements;
-        placements.forEach(bp => {
-            // Ja buildingPlacement ir assignots location
-            if (bp.location) {
-                let x = bp.location.x * scale;
-                let y = bp.location.y * scale;
-
-                // Uzzīmējam punktiņu
-                ctx.beginPath();
-                ctx.arc(x, y, 5, 0, 2 * Math.PI, false);
-                ctx.fillStyle = colorByBuildingType(bp.building_type);
-                ctx.fill();
-
-                // Pie rakstām nosaukumu
-                ctx.fillStyle = "#333";
-                ctx.font = "12px sans-serif";
-                ctx.fillText(bp.building_type, x + 8, y + 4);
-            }
+    function doPost(payload) {
+      fetch("/solve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+        .then((r) => r.json())
+        .then((data) => showSolution(data))
+        .catch((err) => {
+          console.error("Error POST /solve:", err);
         });
     }
 
-    function colorByBuildingType(buildingType) {
-        // Katram buildingType vari piešķirt citu krāsu
-        switch (buildingType) {
-            case "HOUSE":
-                return "green";
-            case "SCHOOL":
-                return "blue";
-            case "HOSPITAL":
-                return "red";
-            case "PHARMACY":
-                return "purple";
-            case "SHOP":
-                return "brown";
-            case "OFFICE":
-                return "orange";
-            default:
-                return "gray";
+    // D) Render the solution (clear old markers, show new ones)
+    function showSolution(solution) {
+      // 1) Clear old markers
+      markerGroup.clearLayers();
+
+      // 2) Show Score
+      scoreInfo.textContent = "Score: " + (solution.score || "None");
+
+      // 3) Show breakdown
+      if (solution.constraintBreakdown) {
+        const lines = solution.constraintBreakdown.map(
+          (c) => `${c.constraintName}: hard=${c.hardPenalty}, soft=${c.softPenalty}`
+        );
+        breakdownEl.textContent = lines.join("\n");
+      } else {
+        breakdownEl.textContent = "No breakdown info";
+      }
+
+      // 4) If no placements, do nothing
+      if (!solution.placements) return;
+
+      // 5) For each buildingPlacement, create a marker on markerGroup
+      solution.placements.forEach((bp) => {
+        if (bp.location) {
+          const lat = bp.location.x;  // interpret x as lat
+          const lng = bp.location.y;  // interpret y as lng
+          const color = colorByBuildingType(bp.building_type);
+
+          const marker = L.circleMarker([lat, lng], {
+            radius: 6,
+            color: color,
+            fillColor: color,
+            fillOpacity: 0.8,
+          });
+
+          marker.bindPopup(`
+            <b>${bp.building_type}</b><br/>
+            ${bp.location.name}<br/>
+            Zone: ${bp.location.zone} <br/>
+            Cost: ${bp.location.cost_factor}
+          `);
+
+          marker.addTo(markerGroup);
         }
+      });
     }
-</script>
+
+    // E) Simple color function
+    function colorByBuildingType(bt) {
+      switch (bt) {
+        case "HOUSE":
+          return "green";
+        case "SCHOOL":
+          return "blue";
+        case "OFFICE":
+          return "orange";
+        case "SHOP":
+          return "brown";
+        case "HOSPITAL":
+          return "red";
+        case "PHARMACY":
+          return "purple";
+        default:
+          return "gray";
+      }
+    }
+  </script>
 </body>
 </html>

@@ -1,0 +1,122 @@
+{
+  "id": "PlanLarge",
+  "locations": [
+    {
+      "id": 1, "name": "Loc1", "x": 56.9496, "y": 24.1052,
+      "zone": "RESIDENTIAL", "cost_factor": 2.0,
+      "allowed_building_types": ["HOUSE","SCHOOL"]
+    },
+    {
+      "id": 2, "name": "Loc2", "x": 56.9550, "y": 24.1150,
+      "zone": "COMMERCIAL", "cost_factor": 6.0,
+      "allowed_building_types": ["OFFICE","SHOP","PHARMACY"]
+    },
+    {
+      "id": 3, "name": "Loc3", "x": 56.9800, "y": 24.2000,
+      "zone": "MIXED", "cost_factor": 8.0,
+      "allowed_building_types": ["HOUSE","OFFICE","SCHOOL","SHOP"]
+    },
+    {
+      "id": 4, "name": "Loc4", "x": 56.9130, "y": 24.0800,
+      "zone": "RESIDENTIAL", "cost_factor": 3.0,
+      "allowed_building_types": ["HOUSE"]
+    },
+    {
+      "id": 5, "name": "Loc5", "x": 57.0300, "y": 24.0800,
+      "zone": "INDUSTRIAL", "cost_factor": 2.0,
+      "allowed_building_types": []
+    },
+    {
+      "id": 6, "name": "Loc6", "x": 56.8990, "y": 24.1100,
+      "zone": "COMMERCIAL", "cost_factor": 7.0,
+      "allowed_building_types": ["OFFICE","SHOP","PHARMACY"]
+    },
+    {
+      "id": 7, "name": "Loc7", "x": 56.9900, "y": 24.1800,
+      "zone": "RESIDENTIAL", "cost_factor": 4.0,
+      "allowed_building_types": ["HOUSE","SCHOOL"]
+    },
+    {
+      "id": 8, "name": "Loc8", "x": 57.0700, "y": 24.1000,
+      "zone": "RESTRICTED", "cost_factor": 1.0,
+      "allowed_building_types": []
+    },
+    {
+      "id": 9, "name": "Loc9", "x": 56.9420, "y": 24.2270,
+      "zone": "MIXED", "cost_factor": 9.0,
+      "allowed_building_types": ["HOUSE","SCHOOL","OFFICE","SHOP"]
+    },
+    {
+      "id": 10,"name": "Loc10","x": 57.0020, "y": 24.3000,
+      "zone": "COMMERCIAL", "cost_factor": 6.0,
+      "allowed_building_types": ["OFFICE","SHOP","PHARMACY"]
+    },
+    {
+      "id": 11,"name": "Loc11","x": 56.9150, "y": 24.0580,
+      "zone": "MIXED", "cost_factor": 10.0,
+      "allowed_building_types": ["HOUSE","OFFICE","SHOP","PHARMACY","SCHOOL"]
+    },
+    {
+      "id": 12,"name": "Loc12","x": 56.9870, "y": 24.1460,
+      "zone": "RESIDENTIAL","cost_factor": 5.0,
+      "allowed_building_types": ["HOUSE","SCHOOL"]
+    },
+    {
+      "id": 13,"name": "Loc13","x": 56.9700, "y": 24.0600,
+      "zone": "COMMERCIAL","cost_factor": 5.0,
+      "allowed_building_types": ["OFFICE","SHOP","PHARMACY"]
+    },
+    {
+      "id": 14,"name": "Loc14","x": 56.9750, "y": 24.2150,
+      "zone": "MIXED", "cost_factor": 9.0,
+      "allowed_building_types": ["HOUSE","OFFICE","SHOP","PHARMACY","SCHOOL"]
+    },
+    {
+      "id": 15,"name": "Loc15","x": 56.9482, "y": 24.0339,
+      "zone": "RESIDENTIAL","cost_factor": 2.0,
+      "allowed_building_types": ["HOUSE","SCHOOL"]
+    },
+    {
+      "id": 16,"name": "Loc16","x": 57.0200, "y": 24.0260,
+      "zone": "INDUSTRIAL","cost_factor": 2.0,
+      "allowed_building_types": []
+    },
+    {
+      "id": 17,"name": "Loc17","x": 56.9250, "y": 24.1490,
+      "zone": "COMMERCIAL","cost_factor": 7.0,
+      "allowed_building_types": ["OFFICE","SHOP","PHARMACY"]
+    },
+    {
+      "id": 18,"name": "Loc18","x": 56.9440, "y": 24.1210,
+      "zone": "RESIDENTIAL","cost_factor": 1.0,
+      "allowed_building_types": ["HOUSE","SCHOOL"]
+    },
+    {
+      "id": 19,"name": "Loc19","x": 57.0650, "y": 24.1100,
+      "zone": "RESTRICTED","cost_factor": 0.5,
+      "allowed_building_types": []
+    },
+    {
+      "id": 20,"name": "Loc20","x": 56.9251, "y": 24.2000,
+      "zone": "COMMERCIAL","cost_factor": 8.0,
+      "allowed_building_types": ["OFFICE","SHOP","PHARMACY"]
+    }
+  ],
+  "buildings": [
+    { "id": 101, "building_type": "HOUSE" },
+    { "id": 102, "building_type": "HOUSE" },
+    { "id": 103, "building_type": "SCHOOL" },
+    { "id": 104, "building_type": "OFFICE" },
+    { "id": 105, "building_type": "SHOP" },
+    { "id": 106, "building_type": "PHARMACY" },
+    { "id": 107, "building_type": "HOSPITAL" },
+    { "id": 108, "building_type": "HOUSE" },
+    { "id": 109, "building_type": "OFFICE" },
+    { "id": 110, "building_type": "SCHOOL" },
+    { "id": 111, "building_type": "HOUSE" },
+    { "id": 112, "building_type": "SHOP" },
+    { "id": 113, "building_type": "PHARMACY" },
+    { "id": 114, "building_type": "HOUSE" },
+    { "id": 115, "building_type": "OFFICE" }
+  ]
+}
