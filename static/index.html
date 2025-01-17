@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>City Planner Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+        }
+
+        #myCanvas {
+            border: 1px solid #ccc;
+            background-color: #fafafa;
+        }
+    </style>
+</head>
+<body>
+<h1>City Planner Visualization</h1>
+<button id="solveBtn">Get/Refresh Plan</button>
+<p id="scoreInfo">Score: N/A</p>
+
+<canvas id="myCanvas" width="600" height="400"></canvas>
+
+<script>
+    const solveBtn = document.getElementById("solveBtn");
+    const scoreInfo = document.getElementById("scoreInfo");
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+
+    solveBtn.addEventListener("click", () => {
+        fetchSolution();
+    });
+
+    function fetchSolution() {
+        // Piemērs: GET pieprasījums uz /solve
+        fetch("/solve")
+            .then(response => response.json())
+            .then(data => {
+                console.log("Solution data:", data);
+                scoreInfo.textContent = "Score: " + data.score;
+                drawSolution(data);
+            })
+            .catch(err => {
+                console.error("Error fetching solution:", err);
+            });
+    }
+
+    function drawSolution(solutionData) {
+        // Notīrām canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Izdomājam mērogu (scale), ja koordinātes var būt lielas
+        // Vienkāršības pēc varam piemēram paņemt factor = 20
+        let scale = 10;
+
+        // Piemēram, ejam cauri "placements" masīvam
+        let placements = solutionData.placements;
+        placements.forEach(bp => {
+            // Ja buildingPlacement ir assignots location
+            if (bp.location) {
+                let x = bp.location.x * scale;
+                let y = bp.location.y * scale;
+
+                // Uzzīmējam punktiņu
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, 2 * Math.PI, false);
+                ctx.fillStyle = colorByBuildingType(bp.building_type);
+                ctx.fill();
+
+                // Pie rakstām nosaukumu
+                ctx.fillStyle = "#333";
+                ctx.font = "12px sans-serif";
+                ctx.fillText(bp.building_type, x + 8, y + 4);
+            }
+        });
+    }
+
+    function colorByBuildingType(buildingType) {
+        // Katram buildingType vari piešķirt citu krāsu
+        switch (buildingType) {
+            case "HOUSE":
+                return "green";
+            case "SCHOOL":
+                return "blue";
+            case "HOSPITAL":
+                return "red";
+            case "PHARMACY":
+                return "purple";
+            case "SHOP":
+                return "brown";
+            case "OFFICE":
+                return "orange";
+            default:
+                return "gray";
+        }
+    }
+</script>
+</body>
+</html>
