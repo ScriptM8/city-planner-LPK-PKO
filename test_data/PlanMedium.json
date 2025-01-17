@@ -1,0 +1,105 @@
+{
+  "id": "PlanMedium",
+  "locations": [
+    {
+      "id": 1,
+      "name": "RigaCenter",
+      "x": 56.9496,
+      "y": 24.1052,
+      "zone": "RESIDENTIAL",
+      "cost_factor": 2.0,
+      "allowed_building_types": ["HOUSE", "SCHOOL"]
+    },
+    {
+      "id": 2,
+      "name": "Daugavgriva",
+      "x": 57.0360,
+      "y": 24.0199,
+      "zone": "COMMERCIAL",
+      "cost_factor": 6.0,
+      "allowed_building_types": ["OFFICE", "SHOP", "PHARMACY"]
+    },
+    {
+      "id": 3,
+      "name": "Teika",
+      "x": 56.9730,
+      "y": 24.2031,
+      "zone": "MIXED",
+      "cost_factor": 8.0,
+      "allowed_building_types": ["HOUSE", "OFFICE", "SCHOOL", "SHOP", "PHARMACY"]
+    },
+    {
+      "id": 4,
+      "name": "Pardaugava",
+      "x": 56.9220,
+      "y": 24.0800,
+      "zone": "RESIDENTIAL",
+      "cost_factor": 3.0,
+      "allowed_building_types": ["HOUSE"]
+    },
+    {
+      "id": 5,
+      "name": "Bolderaja",
+      "x": 57.0300,
+      "y": 24.0670,
+      "zone": "INDUSTRIAL",
+      "cost_factor": 2.0,
+      "allowed_building_types": []
+    },
+    {
+      "id": 6,
+      "name": "Ziepniekkalns",
+      "x": 56.9000,
+      "y": 24.1000,
+      "zone": "COMMERCIAL",
+      "cost_factor": 7.0,
+      "allowed_building_types": ["OFFICE", "SHOP", "PHARMACY"]
+    },
+    {
+      "id": 7,
+      "name": "Mezaparks",
+      "x": 56.9990,
+      "y": 24.1672,
+      "zone": "RESIDENTIAL",
+      "cost_factor": 4.0,
+      "allowed_building_types": ["HOUSE", "SCHOOL"]
+    },
+    {
+      "id": 8,
+      "name": "Mangalsala",
+      "x": 57.0650,
+      "y": 24.1080,
+      "zone": "RESTRICTED",
+      "cost_factor": 1.0,
+      "allowed_building_types": []
+    },
+    {
+      "id": 9,
+      "name": "Plavnieki",
+      "x": 56.9420,
+      "y": 24.2240,
+      "zone": "MIXED",
+      "cost_factor": 9.0,
+      "allowed_building_types": ["HOUSE", "SCHOOL", "OFFICE", "SHOP"]
+    },
+    {
+      "id": 10,
+      "name": "Bergi",
+      "x": 57.0010,
+      "y": 24.3000,
+      "zone": "COMMERCIAL",
+      "cost_factor": 6.0,
+      "allowed_building_types": ["OFFICE", "SHOP", "PHARMACY"]
+    }
+  ],
+  "buildings": [
+    { "id": 101, "building_type": "HOUSE" },
+    { "id": 102, "building_type": "HOUSE" },
+    { "id": 103, "building_type": "SCHOOL" },
+    { "id": 104, "building_type": "OFFICE" },
+    { "id": 105, "building_type": "SHOP" },
+    { "id": 106, "building_type": "PHARMACY" },
+    { "id": 107, "building_type": "HOSPITAL" },
+    { "id": 108, "building_type": "HOUSE" }
+  ]
+}

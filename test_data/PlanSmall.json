@@ -1,0 +1,37 @@
+{
+  "id": "PlanSmall",
+  "locations": [
+    {
+      "id": 1,
+      "name": "RigaOldTown",
+      "x": 56.9489,
+      "y": 24.1064,
+      "zone": "RESIDENTIAL",
+      "cost_factor": 3.0,
+      "allowed_building_types": ["HOUSE", "SCHOOL"]
+    },
+    {
+      "id": 2,
+      "name": "ArenaRiga",
+      "x": 56.9678,
+      "y": 24.1253,
+      "zone": "COMMERCIAL",
+      "cost_factor": 5.0,
+      "allowed_building_types": ["OFFICE", "SHOP"]
+    },
+    {
+      "id": 3,
+      "name": "Jugla",
+      "x": 56.9845,
+      "y": 24.2462,
+      "zone": "MIXED",
+      "cost_factor": 7.0,
+      "allowed_building_types": ["HOUSE", "OFFICE", "SCHOOL", "SHOP"]
+    }
+  ],
+  "buildings": [
+    { "id": 101, "building_type": "HOUSE" },
+    { "id": 102, "building_type": "SCHOOL" },
+    { "id": 103, "building_type": "OFFICE" }
+  ]
+}
